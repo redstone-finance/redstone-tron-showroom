@@ -73,7 +73,7 @@ export const Showroom = () => {
         </p>
       )}
       {isConnecting && (
-        <p className="mt-10 mb-0 text-lg font-bold">Please login to MetaMask</p>
+        <p className="mt-10 mb-0 text-lg font-bold">Connecting to TronLink...</p>
       )}
       {signer && !isChangingNetwork && (
         <div className="flex w-full justify-center items-center mt-8 flex-col">

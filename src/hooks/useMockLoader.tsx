@@ -2,7 +2,7 @@ import { useState } from "react";
 import { timeout } from "../utils";
 
 const loaderTexts = [
-  "Fetching price data",
+  "Fetching oracle data",
   "Sending transaction with fetched price data",
   "Receiving price from smart contract",
 ];

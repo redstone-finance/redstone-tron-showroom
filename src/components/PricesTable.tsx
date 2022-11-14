@@ -21,7 +21,7 @@ export const PricesTable = ({ blockNumber, timestamp, prices }: Props) => {
           <td className="py-3 px-6 font-bold text-right">{blockNumber}</td>
         </tr>
         <tr>
-          <td className="py-3 px-6">Timestamp</td>
+          <td className="py-3 px-6">Oracle data timestamp</td>
           <td className="py-3 px-6 font-bold text-right">
             {new Date(timestamp).toLocaleString()}
           </td>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BigNumber, providers } from "ethers";
-import Web3Modal from "web3modal";
+// import Web3Modal from "web3modal";
 import { ChainDetails, chains } from "../config/chains";
 import { emptyPrices } from "../utils";
 
@@ -11,7 +11,7 @@ type NetworkToAdd = Omit<
 
 export const useWeb3Modal = () => {
   const [prices, setPrices] = useState(emptyPrices);
-  const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null);
+  // const [tronWeb, setTronWeb] = useState<any | null>(null);
   const [network, setNetwork] = useState<ChainDetails | null>(null);
   const [signer, setSigner] = useState<providers.JsonRpcSigner | null>(null);
   const [walletAddress, setWalletAddress] = useState("");
@@ -19,15 +19,60 @@ export const useWeb3Modal = () => {
   const [isConnecting, setIsConnecting] = useState(false);
 
   useEffect(() => {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-    });
-    setWeb3Modal(web3Modal);
+    // const web3Modal = new Web3Modal({
+    //   cacheProvider: true,
+    // });
+    // setWeb3Modal(web3Modal);
   }, []);
 
   useEffect(() => {
     changeNetwork();
   }, [network]);
+
+  // function getTronweb(){
+  //   setIsConnecting(true);
+  //   var obj = setInterval(async ()=>{
+  //       if ((window  as any).tronWeb && (window  as any).tronWeb.defaultAddress.base58) {
+  //           clearInterval(obj);
+  //           // setTronWeb((window  as any).tronWeb);
+            
+  //           const walletAddress = (window  as any).tronWeb.defaultAddress.base58;
+  //           setWalletAddress(walletAddress);
+  //           setIsConnecting(false);
+  //           setPrices(emptyPrices);
+  //           setNetwork(chains[1]);
+  //           setSigner("hehe" as any);
+  //           // alert("Yes, catch it: " + walletAddress);
+  //       }
+  //   }, 10);
+  // }
+
+  async function getTronweb() {
+    let tronWeb;
+    setIsConnecting(true);
+    const wdw = window as any;
+    if (wdw.tronLink.ready) {
+      tronWeb = wdw.tronWeb;
+    } else {
+      const res = await wdw.tronLink.request({ method: 'tron_requestAccounts' });
+      if (res.code === 200) {
+        tronWeb = wdw.tronLink.tronWeb;
+      }
+    }
+    setVarsAfterGettingTronweb();
+    return tronWeb;
+  }
+
+  function setVarsAfterGettingTronweb() {
+    const wdw = window as any;
+    const tronWeb = wdw.tronWeb;
+    const walletAddress = tronWeb.defaultAddress.base58;
+    setWalletAddress(walletAddress);
+    setIsConnecting(false);
+    setPrices(emptyPrices);
+    setNetwork(chains[1]);
+    setSigner("hehe" as any);
+  }
 
   const changeNetwork = async () => {
     if (network) {
@@ -40,10 +85,10 @@ export const useWeb3Modal = () => {
         ...restNetworkParams
       } = network;
       try {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: restNetworkParams.chainId }],
-        });
+        // await window.ethereum.request({
+        //   method: "wallet_switchEthereumChain",
+        //   params: [{ chainId: restNetworkParams.chainId }],
+        // });
         setIsChangingNetwork(false);
       } catch (switchError: any) {
         if (switchError.code === 4902) {
@@ -57,45 +102,47 @@ export const useWeb3Modal = () => {
   };
 
   const addNewNetwork = async (networkParams: NetworkToAdd) => {
-    try {
-      await window.ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [networkParams],
-      });
-    } catch {
-      setPrices(emptyPrices);
-    }
+    // try {
+    //   await window.ethereum.request({
+    //     method: "wallet_addEthereumChain",
+    //     params: [networkParams],
+    //   });
+    // } catch {
+    //   setPrices(emptyPrices);
+    // }
   };
 
   const connectWallet = async () => {
-    if (web3Modal) {
-      try {
-        setIsConnecting(true);
-        const instance = await web3Modal.connect();
-        addListeners(instance);
-        const provider = new providers.Web3Provider(instance);
-        const signer = provider.getSigner();
-        setSigner(signer);
-        const walletAddress = await signer.getAddress();
-        setWalletAddress(walletAddress);
-      } catch (error: any) {
-        console.error(error);
-      } finally {
-        setIsConnecting(false);
-        setPrices(emptyPrices);
-      }
-    }
+    // alert("Connecting wallet");
+    getTronweb();
+    // if (web3Modal) {
+    //   try {
+    //     setIsConnecting(true);
+    //     const instance = await web3Modal.connect();
+    //     addListeners(instance);
+    //     const provider = new providers.Web3Provider(instance);
+    //     const signer = provider.getSigner();
+    //     setSigner(signer);
+    //     const walletAddress = await signer.getAddress();
+    //     setWalletAddress(walletAddress);
+    //   } catch (error: any) {
+    //     console.error(error);
+    //   } finally {
+    //     setIsConnecting(false);
+    //     setPrices(emptyPrices);
+    //   }
+    // }
   };
 
   const reconnectWallet = async () => {
-    if (web3Modal) {
-      const instance = await web3Modal.connect();
-      const provider = new providers.Web3Provider(instance);
-      const signer = provider.getSigner();
-      setSigner(signer);
-      const walletAddress = await signer.getAddress();
-      setWalletAddress(walletAddress);
-    }
+    // if (web3Modal) {
+    //   const instance = await web3Modal.connect();
+    //   const provider = new providers.Web3Provider(instance);
+    //   const signer = provider.getSigner();
+    //   setSigner(signer);
+    //   const walletAddress = await signer.getAddress();
+    //   setWalletAddress(walletAddress);
+    // }
   };
 
   const addListeners = (web3ModalProvider: any) => {

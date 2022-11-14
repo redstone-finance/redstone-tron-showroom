@@ -1,6 +1,7 @@
 import { ChainDetails } from "../config/chains";
 import WalletIcon from "../assets/icons/wallet.png";
 import ContractIcon from "../assets/icons/contract.png";
+import CodeIcon from "../assets/icons/code.png";
 
 interface Props {
   walletAddress: string;
@@ -37,6 +38,25 @@ export const ChainDataTable = ({ walletAddress, network }: Props) => (
             referrerPolicy="no-referrer"
           >
             {network.exampleContractAddress}
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td className="flex items-center gap-3 py-3 px-6">
+          <img
+            className="object-scale-down w-6 h-6"
+            src={CodeIcon}
+            alt="Code icon"
+          />
+          Contract Source Code
+        </td>
+        <td className="py-3 px-6 text-right underline">
+          <a
+            href="https://github.com/redstone-finance/redstone-tron-integration/blob/main/sample-dapp/contracts/RedstoneSampleConsumer.sol"
+            target="blank"
+            referrerPolicy="no-referrer"
+          >
+            RedstoneTronSampleConsumer.sol
           </a>
         </td>
       </tr>

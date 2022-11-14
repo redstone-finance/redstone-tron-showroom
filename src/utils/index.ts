@@ -12,10 +12,11 @@ export const emptyPrices = {
 };
 
 export const formatPrice = (price: number) => {
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  return price;
+  // const formatter = new Intl.NumberFormat("en-US", {
+  //   style: "currency",
+  //   currency: "USD",
+  // });
 
-  return formatter.format(price);
+  // return formatter.format(price);
 };
