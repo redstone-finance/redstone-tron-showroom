@@ -11,6 +11,7 @@ import redstoneProtocol from "redstone-protocol"
 import { hexlify } from "ethers/lib/utils";
 import axios from "axios";
 import redstoneApi from "redstone-api";
+import { getTrxPriceFromRealContract } from "../utils/get-trx-price-from-real-tron-contract";
 
 const redstoneCacheServiceUrls = [
   "https://cache-service-direct-1.b.redstone.finance",
@@ -71,10 +72,6 @@ export const usePricesFromContract = (
     return String(response.data.prices[0].value);
   }
 
-  async function getTrxPriceFromRealContract() {
-    return String(0.05);
-  }
-
   const getPricesFromContract = async () => {
     startMockLoader();
     setIsLoading(true);
@@ -93,8 +90,10 @@ export const usePricesFromContract = (
     setTimestamp(timestamp);
     setIsLoading(false);
 
+    await getTrxPriceFromRealContract()
+
     const pricesObj = {
-      trx: await getTrxPriceFromRealContract(),
+      trx: extractPrice(signedOracleDataPackage, "TRX"),
       jst: extractPrice(signedOracleDataPackage, "JST"),
       btc: extractPrice(signedOracleDataPackage, "BTC"),
       eth: extractPrice(signedOracleDataPackage, "ETH"),
